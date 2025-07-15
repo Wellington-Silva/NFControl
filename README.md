@@ -1,2 +1,101 @@
-# NFControl
-Sistema para emissão de nota fiscal eletrônica (NF-e) dos tipos NF-e e NFS-e.
+# 📄 NFControl – API de Emissão de Notas Fiscais NF-e e NFS-e
+
+API backend desenvolvida em Node.js com suporte para emissão, validação e gerenciamento de **Notas Fiscais Eletrônicas (NF-e)** e **Notas Fiscais de Serviço Eletrônicas (NFS-e)**, ideal para sistemas de vendas de produtos e prestação de serviços.
+
+---
+
+## 🚀 Funcionalidades
+
+- 📦 Emissão de NF-e para produtos (modelo 55)
+- 🧾 Emissão de NFS-e para serviços
+- 🔍 Validação de notas fiscais via código único
+- 📊 Cálculo automático de impostos (ICMS e ISS)
+- 📁 Armazenamento de dados com histórico de emissão
+- 🔐 Geração de hash de autenticidade
+- 🧑‍💼 Autenticação de empresas emissoras (JWT)
+
+---
+
+## 🧠 Tecnologias Utilizadas
+
+- **Node.js** + **TypeScript**
+- **Express** – Microframework principal
+- **PostgreSQL** – Banco de dados relacional
+- **TypeORM** – ORM para modelagem de entidades
+- **JWT** – Autenticação segura
+- **bcrypt** – Hash de senhas
+- **class-validator** – Validação de DTOs
+- **crypto** – Geração de hash de verificação
+
+---
+
+## 📦 Instalação
+
+```bash
+# Clone o repositório
+git clone https://github.com/seu-usuario/emitfiscal-api.git
+cd emitfiscal-api
+
+# Instale as dependências
+npm install
+
+# Configure as variáveis de ambiente
+cp .env.example .env
+# edite o .env com suas informações
+
+# Execute as migrations (caso use TypeORM CLI)
+npm run typeorm migration:run
+
+# Inicie o servidor
+npm run start:dev
+```
+
+---
+
+| Método | Rota                       | Descrição                     |
+| ------ | -------------------------- | ----------------------------- |
+| POST   | `/invoices/nfe`            | Emitir NF-e (produtos)        |
+| POST   | `/invoices/nfse`           | Emitir NFS-e (serviços)       |
+| GET    | `/invoices/:code`          | Obter detalhes da nota fiscal |
+| GET    | `/invoices/validate/:code` | Validar código da nota fiscal |
+| DELETE | `/invoices/:id`            | Cancelar nota fiscal          |
+| GET    | `/invoices`                | Listar notas por filtros      |
+
+---
+
+## Estrutura do projeto
+
+```bash
+src/
+├── controllers/
+│   ├── InvoiceController.ts
+├── routes/
+│   ├── invoice.routes.ts
+│   └── index.ts
+├── services/
+│   ├── InvoiceService.ts
+├── entities/
+│   ├── Company.ts
+│   ├── Client.ts
+│   ├── Invoice.ts
+│   ├── InvoiceItem.ts
+├── database/
+│   ├── data-source.ts
+├── middlewares/
+│   ├── authMiddleware.ts
+├── utils/
+│   ├── generateHash.ts
+├── dtos/
+│   ├── CreateInvoiceDTO.ts
+├── config/
+│   └── env.ts
+├── server.ts
+└── app.ts
+```
+
+---
+
+## ✉️ Contato
+Desenvolvido por Wellington Silva  
+📧 wellingtonsilva112000@gmail.com  
+🔗 [LinkedIn](https://www.linkedin.com/in/wellingtoncarvalhosilva)

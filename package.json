@@ -1,0 +1,48 @@
+{
+  "name": "nfcontrol",
+  "version": "1.0.0",
+  "description": "API para emissão de notas fiscais eletrônicas (NF-e e NFS-e)",
+  "main": "server.ts",
+  "scripts": {
+    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Wellington-Silva/NFControl.git"
+  },
+  "keywords": [
+    "Invoice",
+    "company",
+    "e",
+    "client"
+  ],
+  "author": "Wellington Silva",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Wellington-Silva/NFControl/issues"
+  },
+  "homepage": "https://github.com/Wellington-Silva/NFControl#readme",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.2",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.0",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.16.3",
+    "typeorm": "^0.3.25",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^24.0.14",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.8.3"
+  }
+}
