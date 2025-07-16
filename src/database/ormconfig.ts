@@ -3,6 +3,9 @@ import { Company } from '../entities/Company';
 import { Client } from '../entities/Client';
 import { Invoice } from '../entities/Invoice';
 import { InvoiceItem } from '../entities/InvoiceItem';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
