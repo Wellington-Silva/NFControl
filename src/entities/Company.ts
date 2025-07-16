@@ -32,6 +32,9 @@ export class Company {
     @Column()
     password: string;
 
+    @Column({ default: true })
+    active: boolean;
+
     @OneToMany(() => Invoice, invoice => invoice.company)
     invoices: Invoice[];
 }
