@@ -6,18 +6,13 @@ class AuthService {
 
     async loginCompany(email: string, password: string) {
         const company = await AuthRepository.findByEmail(email);
-        if (!company) {
-            return company;
-        }
+        if (!company) return company;
 
         const isMatch = bcrypt.compareSync(password, company.password);
-        if (!isMatch) {
-            return { error: true, message: 'Senha inválida' };
-        };
+        if (!isMatch) return { error: true, message: 'Senha inválida' };
 
-        if (!company.active) {
+        if (!company.active) 
             return { error: true, message: 'Empresa desativada' };
-        };
 
         const userJWT = {
             id: company.id,

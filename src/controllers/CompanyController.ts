@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import AuthService from '../services/AuthService';
 import CompanyService from '../services/CompanyService';
 
 interface ICompany {
@@ -9,9 +10,15 @@ interface ICompany {
     address: string;
     city: string;
     state: string;
-}
+};
 
 class CompanyController {
+
+    async login(req: Request, res: Response) {
+        const { email, password } = req?.body as { email: string; password: string };
+        const result = await AuthService.loginCompany(email, password);
+        res.json(result);
+    };
 
     async list(req: Request, res: Response) {
         const companies = await CompanyService.listCompanies();
@@ -30,8 +37,17 @@ class CompanyController {
         res.status(201).json(company);
     };
 
-    async login(req: Request, res: Response) {
+    async update(req: Request, res: Response) {
+        const { id } = req?.query;
+        const { name, cnpj, email, password, address, city, state } = req?.body as ICompany;
+        const company = await CompanyService.updateCompany(id as string, name, cnpj, email, password, address, city, state);
+        res.json(company);
+    };
 
+    async delete(req: Request, res: Response) {
+        const { id } = req?.query;
+        await CompanyService.deleteCompany(id as string);
+        res.json({ error: false, message: "Company deleted" });
     };
 
 };
