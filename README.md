@@ -70,9 +70,11 @@ src/
 ├── controllers/
 │   ├── InvoiceController.ts
 ├── routes/
-│   ├── invoice.routes.ts
-│   └── index.ts
+│   ├── InvoiceRouter.ts
+│   ├──  CompanyRouter.ts
+|   ├──  ClientRouter.ts
 ├── services/
+|   ├── AuthService.ts
 │   ├── InvoiceService.ts
 ├── entities/
 │   ├── Company.ts
@@ -80,17 +82,15 @@ src/
 │   ├── Invoice.ts
 │   ├── InvoiceItem.ts
 ├── database/
-│   ├── data-source.ts
+│   ├── ormconfig.ts
 ├── middlewares/
 │   ├── authMiddleware.ts
+|   ├── asyncHandler.ts
 ├── utils/
 │   ├── generateHash.ts
-├── dtos/
-│   ├── CreateInvoiceDTO.ts
 ├── config/
-│   └── env.ts
+│   ├── 
 ├── server.ts
-└── app.ts
 ```
 
 ---
