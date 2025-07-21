@@ -2,33 +2,35 @@ import { Request, Response } from 'express';
 import AuthService from '../services/AuthService';
 import CompanyService from '../services/CompanyService';
 
-interface ICompany {
-    name: string;
-    cnpj: string;
-    email: string;
-    password: string;
-    address: string;
-    city: string;
-    state: string;
-};
-
 class CompanyController {
 
     async login(req: Request, res: Response) {
-        const { email, password } = req?.body as { email: string; password: string };
-        const result = await AuthService.loginCompany(email, password);
-        res.json(result);
+        try {
+            const { email, password } = req?.body as { email: string; password: string };
+            const result = await AuthService.loginCompany(email, password);
+            res.json(result);
+        } catch (error) {
+            res.status(500).json({ error: true, message: 'Erro ao fazer login' });
+        }
     };
 
     async list(req: Request, res: Response) {
-        const companies = await CompanyService.listCompanies();
-        res.json(companies);
+        try {
+            const companies = await CompanyService.listCompanies();
+            res.json(companies);
+        } catch (error) {
+            res.status(500).json({ error: true, message: 'Erro ao listar empresas' });
+        }
     };
 
     async show(req: Request, res: Response) {
-        const { id } = req?.query;
-        const company = await CompanyService.showCompany(id as string);
-        res.json(company);
+        try {
+            const { id } = req?.query;
+            const company = await CompanyService.showCompany(id as string);
+            res.json(company);
+        } catch (error) {
+            res.status(500).json({ error: true, message: 'Erro ao mostrar empresa' });
+        }
     };
 
     async register(req: Request, res: Response) {
@@ -77,21 +79,64 @@ class CompanyController {
 
             res.status(201).json(company);
         } catch (error) {
-            res.status(500).json({ message: 'Erro ao cadastrar empresa', error });
+            res.status(500).json({ error: true, message: 'Erro ao cadastrar empresa' });
         }
     };
 
     async update(req: Request, res: Response) {
         const { id } = req?.query;
-        const { name, cnpj, email, password, address, city, state } = req?.body as ICompany;
-        const company = await CompanyService.updateCompany(id as string, name, cnpj, email, password, address, city, state);
+        const {
+            name,
+            cnpj,
+            email,
+            password,
+            phone,
+            address,
+            number,
+            complement,
+            neighborhood,
+            city,
+            state,
+            cep,
+            municipalCode,
+            ie,
+            im,
+            cnae,
+            taxRegime,
+            environment } = req?.body;
+
+        const company = await CompanyService.updateCompany(
+            id as string,
+            name,
+            cnpj,
+            email,
+            password,
+            phone,
+            address,
+            number,
+            complement,
+            neighborhood,
+            city,
+            state,
+            cep,
+            municipalCode,
+            ie,
+            im,
+            cnae,
+            taxRegime,
+            environment
+        );
         res.json(company);
     };
 
     async delete(req: Request, res: Response) {
-        const { id } = req?.query;
-        await CompanyService.deleteCompany(id as string);
-        res.json({ error: false, message: "Company deleted" });
+        try {
+            const { id } = req?.query;
+            await CompanyService.deleteCompany(id as string);
+            res.json({ error: false, message: "Company deleted" });
+        } catch (error) {
+            res.status(500).json({ error: true, message: 'Erro ao deletar empresa' });
+        }
     };
 
 };

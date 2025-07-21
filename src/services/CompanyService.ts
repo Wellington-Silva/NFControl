@@ -46,15 +46,46 @@ class CompanyService {
         return createdCompany;
     };
 
-    async updateCompany(id: string, name: string, cnpj: string, email: string, password: string, address: string, city: string, state: string) {
+    async updateCompany(
+        id: string,
+        name: string,
+        cnpj: string,
+        email: string,
+        password: string,
+        phone: string,
+        address: string,
+        number: string,
+        complement: string,
+        neighborhood: string,
+        city: string,
+        state: string,
+        cep: string,
+        municipalCode: string,
+        ie: string,
+        im: string,
+        cnae: string,
+        taxRegime: string,
+        environment: string) {
+            
         const companyData = {
             name,
             cnpj,
             email,
             password,
+            phone,
             address,
+            number,
+            complement,
+            neighborhood,
             city,
-            state
+            state,
+            cep,
+            municipalCode,
+            ie,
+            im,
+            cnae,
+            taxRegime,
+            environment
         };
 
         const company = await CompanyRepository.update(id, companyData);
