@@ -1,3 +1,4 @@
+import bcrypt from "bcrypt";
 import CompanyRepository from "../repositories/CompanyRepository";
 
 class CompanyService {
@@ -12,24 +13,42 @@ class CompanyService {
         return company;
     };
 
-    async registerCompany(name: string, cnpj: string, email: string, password: string, address: string, city: string, state: string) {
+    async registerCompany(data: {
+        name: string;
+        cnpj: string;
+        email: string;
+        password: string;
+        phone: string;
+        address: string;
+        number: string;
+        complement?: string;
+        neighborhood: string;
+        city: string;
+        state: string;
+        cep: string;
+        municipalCode: string;
+        ie: string;
+        im: string;
+        cnae: string;
+        taxRegime: string;
+        environment?: string;
+    }) {
+        const hashedPassword = await bcrypt.hash(data.password, 10);
+
         const companyData = {
-            name, 
-            cnpj,
-            email,
-            password,
-            address,
-            city,
-            state
+            ...data,
+            password: hashedPassword,
+            active: true,
+            environment: data.environment || 'homologation'
         };
 
-        const updatedCompany = await CompanyRepository.create(companyData);
-        return updatedCompany;
+        const createdCompany = await CompanyRepository.create(companyData);
+        return createdCompany;
     };
 
     async updateCompany(id: string, name: string, cnpj: string, email: string, password: string, address: string, city: string, state: string) {
         const companyData = {
-            name, 
+            name,
             cnpj,
             email,
             password,

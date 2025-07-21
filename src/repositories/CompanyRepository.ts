@@ -5,11 +5,11 @@ class CompanyRepository {
 
     constructor(
         private companyRepo = AppDataSource.getRepository(Company)
-    ) {};
+    ) { };
 
     async findAll(): Promise<Company[] | {}> {
         const companies = await this.companyRepo.find({ where: { active: true } });
-        if (!companies || companies.length === 0) 
+        if (!companies || companies.length === 0)
             return { error: true, message: "Companies not found" };
         return companies;
     }
@@ -18,7 +18,13 @@ class CompanyRepository {
         const company = await this.companyRepo.findOne({ where: { id } });
         if (!company) return { error: true, message: "Company not found" };
         return company;
-    }
+    };
+
+    async findByCnpjOrEmail(cnpj: string, email: string): Promise<Company | null> {
+        return await this.companyRepo.findOne({
+            where: [{ cnpj }, { email }],
+        });
+    };
 
     async create(companyData: Partial<Company>): Promise<Company> {
         const companyPartialData = this.companyRepo.create(companyData);
@@ -35,7 +41,7 @@ class CompanyRepository {
 
         const companyResult = await this.companyRepo.findOne({ where: { id } });
         if (!companyResult) throw new Error("Company not found");
-        
+
         return companyResult;
     };
 

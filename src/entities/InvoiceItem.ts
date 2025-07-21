@@ -19,6 +19,9 @@ export class InvoiceItem {
   @Column()
   quantity: number;
 
+  @Column()
+  description: string;
+
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   unitPrice: number;
 

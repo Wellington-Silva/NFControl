@@ -32,9 +32,53 @@ class CompanyController {
     };
 
     async register(req: Request, res: Response) {
-        const { name, cnpj, email, password, address, city, state } = req?.body as ICompany;
-        const company = await CompanyService.registerCompany(name, cnpj, email, password, address, city, state);
-        res.status(201).json(company);
+        const {
+            name,
+            cnpj,
+            email,
+            password,
+            phone,
+            address,
+            number,
+            complement,
+            neighborhood,
+            city,
+            state,
+            cep,
+            municipalCode,
+            ie,
+            im,
+            cnae,
+            taxRegime,
+            environment
+        } = req.body;
+
+        try {
+            const company = await CompanyService.registerCompany({
+                name,
+                cnpj,
+                email,
+                password,
+                phone,
+                address,
+                number,
+                complement,
+                neighborhood,
+                city,
+                state,
+                cep,
+                municipalCode,
+                ie,
+                im,
+                cnae,
+                taxRegime,
+                environment
+            });
+
+            res.status(201).json(company);
+        } catch (error) {
+            res.status(500).json({ message: 'Erro ao cadastrar empresa', error });
+        }
     };
 
     async update(req: Request, res: Response) {
