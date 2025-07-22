@@ -88,8 +88,6 @@ src/
 |   ├── asyncHandler.ts
 ├── utils/
 │   ├── generateHash.ts
-├── config/
-│   ├── 
 ├── server.ts
 ```
 
