@@ -12,15 +12,28 @@ class ClientService {
         return client;
     };
 
-    async createClient(name: string, cpfOrCnpj: string, email: string, address: string, city: string, state: string) {
+    async createClient(data: {
+        name: string;
+        cpfOrCnpj: string;
+        email: string;
+        address: string;
+        city: string;
+        state: string;
+        phone?: string;
+        cep?: string;
+        number?: string;
+        complement?: string;
+        neighborhood?: string;
+        municipalCode?: string;
+        ie?: string;
+        im?: string;
+    }) {
         const clientData = {
-            name,
-            cpfOrCnpj,
-            email,
-            address,
-            city,
-            state
+            ...data,
+            type: (data.cpfOrCnpj.length === 11 ? 'individual' : 'company') as 'individual' | 'company',
+            active: true
         };
+
         const client = await ClientRepository.createClient(clientData);
         return client;
     };

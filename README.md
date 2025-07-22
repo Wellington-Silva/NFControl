@@ -34,13 +34,13 @@ API backend desenvolvida em Node.js com suporte para emissão, validação e ger
 ```bash
 # Clone o repositório
 git clone https://github.com/seu-usuario/emitfiscal-api.git
-cd emitfiscal-api
+cd NFControl
 
 # Instale as dependências
 npm install
 
 # Configure as variáveis de ambiente
-cp .env.example .env
+.env.example  
 # edite o .env com suas informações
 
 # Execute as migrations (caso use TypeORM CLI)

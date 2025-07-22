@@ -1,4 +1,5 @@
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import CompanyRepository from "../repositories/CompanyRepository";
 
 class CompanyService {
@@ -43,7 +44,28 @@ class CompanyService {
         };
 
         const createdCompany = await CompanyRepository.create(companyData);
-        return createdCompany;
+
+        const companyJWT = {
+            id: createdCompany.id,
+            name: createdCompany.name,
+            email: createdCompany.email,
+            cnpj: createdCompany.cnpj,
+            active: createdCompany.active,
+            environment: createdCompany.environment
+        }
+
+
+        try {
+            const token = jwt.sign(
+                companyJWT,
+                process.env.JWT_SECRET as string, {
+                expiresIn: '2d'
+            });
+            return { token };
+        } catch (error) {
+            console.error("Erro ao gerar o token JWT:", error);
+            throw new Error("Erro ao criar o token JWT.");
+        }
     };
 
     async updateCompany(
@@ -66,7 +88,7 @@ class CompanyService {
         cnae: string,
         taxRegime: string,
         environment: string) {
-            
+
         const companyData = {
             name,
             cnpj,

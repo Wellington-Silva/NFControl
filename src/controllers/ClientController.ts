@@ -1,15 +1,6 @@
 import { Request, Response } from 'express';
 import ClientService from '../services/ClientService';
 
-interface IClient {
-    name: string;
-    cpfOrCnpj: string;
-    email: string;
-    address: string;
-    city: string;
-    state: string;
-};
-
 class ClientController {
 
     async list (req: Request, res: Response) {
@@ -24,20 +15,16 @@ class ClientController {
     };
 
     async create(req: Request, res: Response) {
-        const { name, cpfOrCnpj, email, address, city, state } = req?.body as IClient;
-        if (!name || !cpfOrCnpj || !email || !address || !city || !state) {
-            return res.status(400).json({ error: true, message: "All fields are required" });
-        }
-        const client = await ClientService.createClient(name, cpfOrCnpj, email, address, city, state);
+        const client = await ClientService.createClient(req?.body);
         res.status(201).json(client);
     };
 
-    async update(req: Request, res: Response) {
-        const { name, cpfOrCnpj, email, address, city, state } = req?.body as IClient;
-        const { id } = req?.query;
-        const updatedClient = await ClientService.updateClient(id as string, name, cpfOrCnpj, email, address, city, state);
-        res.json(updatedClient);
-    };
+    // async update(req: Request, res: Response) {
+    //     const { name, cpfOrCnpj, email, address, city, state } = req?.body as IClient;
+    //     const { id } = req?.query;
+    //     const updatedClient = await ClientService.updateClient(id as string, name, cpfOrCnpj, email, address, city, state);
+    //     res.json(updatedClient);
+    // };
 
     async delete(req: Request, res: Response) {
         const { id } = req?.query;
