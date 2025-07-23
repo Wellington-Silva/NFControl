@@ -3,20 +3,32 @@ import ClientService from '../services/ClientService';
 
 class ClientController {
 
-    async list (req: Request, res: Response) {
-        const clients = await ClientService.listAllClients();
-        res.json(clients);
+    async list(req: Request, res: Response) {
+        try {
+            const clients = await ClientService.listAllClients();
+            res.json(clients);
+        } catch (error) {
+            res.status(500).json({ error: true, message: 'Internal Server Error' });
+        }
     };
 
     async getById(req: Request, res: Response) {
-        const { id } = req?.query;
-        const client = await ClientService.getClientById(id as string);
-        res.json(client);
+        try {
+            const { id } = req?.query;
+            const client = await ClientService.getClientById(id as string);
+            res.json(client);
+        } catch (error) {
+            res.status(500).json({ error: true, message: 'Internal Server Error' });
+        }
     };
 
     async create(req: Request, res: Response) {
-        const client = await ClientService.createClient(req?.body);
-        res.status(201).json(client);
+        try {
+            const client = await ClientService.createClient(req?.body);
+            res.status(201).json(client);
+        } catch (error) {
+            res.status(500).json({ error: true, message: "Internal Server Error" });
+        }
     };
 
     // async update(req: Request, res: Response) {
@@ -27,9 +39,13 @@ class ClientController {
     // };
 
     async delete(req: Request, res: Response) {
-        const { id } = req?.query;
-        const result = await ClientService.deleteClient(id as string);
-        res.json(result);
+        try {
+            const { id } = req?.query;
+            const result = await ClientService.deleteClient(id as string);
+            res.json(result);
+        } catch (error) {
+            res.status(500).json({ error: true, message: 'Internal Server Error' });
+        }
     };
 
 };
