@@ -8,6 +8,10 @@ class InvoiceController {
             const { companyId, clientId } = req?.query;
             const data = req.body;
 
+            if (!data || typeof data !== 'object') {
+                return res.status(400).json({ error: true, message: "Corpo da requisição inválido" });
+            }
+
             if (typeof companyId !== 'string' || typeof clientId !== 'string') {
                 return res.status(400).json({ error: "Company ID and Client ID must be strings" });
             };
@@ -15,6 +19,7 @@ class InvoiceController {
             const invoice = await InvoiceService.issueInvoice(data, companyId, clientId);
             res.status(201).json(invoice);
         } catch (error) {
+            console.log(error);
             res.status(400).json({ error: true, message: "Failed to issue invoice" });
         }
     };

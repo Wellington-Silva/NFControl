@@ -67,7 +67,6 @@ export class Invoice {
     @ManyToOne(() => Client, client => client.invoices)
     client: Client;
 
-    @OneToMany(() => InvoiceItem, item => item.invoice, { cascade: true })
+    @OneToMany(() => InvoiceItem, item => item.invoice, { cascade: true, eager: true })
     items: InvoiceItem[];
-
 };
