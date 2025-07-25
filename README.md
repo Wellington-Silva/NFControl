@@ -47,14 +47,14 @@ npm install
 npm run typeorm migration:run
 
 # Inicie o servidor
-npm run start:dev
+npm run dev
 ```
 
 ---
 
 | Método | Rota                       | Descrição                     |
 | ------ | -------------------------- | ----------------------------- |
-| POST   | `/invoices/emission`       | Emitir NF-e NFS-e             |
+| POST   | `/invoices/emission`       | Emitir NF-e ou NFS-e          |
 | GET    | `/invoices/:id  `          | Obter detalhes da nota fiscal |
 | GET    | `/invoices/validate/:code` | Validar código da nota fiscal |
 | DELETE | `/invoices/:id`            | Cancelar nota fiscal          |
