@@ -58,7 +58,7 @@ npm run start:dev
 | GET    | `/invoices/:id  `          | Obter detalhes da nota fiscal |
 | GET    | `/invoices/validate/:code` | Validar código da nota fiscal |
 | DELETE | `/invoices/:id`            | Cancelar nota fiscal          |
-| GET    | `/invoices`                | Listar histórico de notas     |
+| GET    | `/invoices`                | Listar histórico de emissões  |
 
 ---
 
