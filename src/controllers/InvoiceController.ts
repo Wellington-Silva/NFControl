@@ -41,6 +41,32 @@ class InvoiceController {
 
     };
 
+    async list(req: Request, res: Response) {
+        try {
+            const { companyId } = req?.query;
+            if (!companyId) {
+                return res.status(400).json({ error: "Company ID is required" });
+            }
+            const invoices = await InvoiceService.listInvoices(companyId as string);
+            res.json(invoices);
+        } catch (error) {
+            res.status(500).json({ error: true, message: "Internal Server Error" });
+        }
+    };
+
+    async cancel(req: Request, res: Response) {
+        try {
+            const { invoiceId } = req?.query;
+            if (!invoiceId) {
+                return res.status(400).json({ error: "Invoice ID is required" });
+            }
+            const canceledInvoice = await InvoiceService.cancelInvoice(invoiceId as string);
+            res.json(canceledInvoice);
+        } catch (error) {
+            res.status(500).json({ error: true, message: "Internal Server Error" });
+        }
+    };
+
 };
 
 export default new InvoiceController();

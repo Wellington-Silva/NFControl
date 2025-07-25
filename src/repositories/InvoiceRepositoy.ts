@@ -1,10 +1,10 @@
-import { AppDataSource } from "../database/ormconfig";
 import { Client } from "../entities/Client";
 import { Company } from "../entities/Company";
 import { Invoice } from "../entities/Invoice";
+import { InvoiceType } from '../entities/Invoice';
 import { InvoiceStatus } from '../entities/Invoice';
 import { InvoiceItem } from "../entities/InvoiceItem";
-import { InvoiceType } from '../entities/Invoice';
+import { AppDataSource } from "../database/ormconfig";
 
 class InvoiceRepository {
 
@@ -84,13 +84,54 @@ class InvoiceRepository {
         return savedInvoice;
     };
 
-    async consultationInvoice(invoiceId: string) {
-        if (!invoiceId) throw new Error("Invoice ID is required");
-        return await this.invoiceRepo.findOne({ where: { id: invoiceId } });
+    async consultationInvoice(code: string) {
+        if (!code) throw new Error("Invoice Code is required");
+        return await this.invoiceRepo.findOne({ where: { invoiceCode: code } });
     };
 
-    async validationInvoice(invoiceId: string) {
+    async validationInvoice(code: string) {
 
+    };
+
+    async calcTax(code: string) { //  Cálculo automático de impostos (ICMS e ISS)
+        const invoice = await this.invoiceRepo.findOne({ where: { invoiceCode: code }, relations: ["items"] });
+        if (!invoice) throw new Error("Invoice not found");
+
+        let totalTax = 0;
+        invoice.items.forEach(item => {
+            if (item.taxType === 'ICMS') {
+                totalTax += item.total * (item.taxRate / 100);
+            } else if (item.taxType === 'ISS') {
+                totalTax += item.total * (item.taxRate / 100);
+            }
+        });
+
+        return totalTax;
+    };
+
+    async listInvoicesByCompany(companyId: string) {
+        const invoices = await this.invoiceRepo.find(
+            {
+                where: { 
+                    company: { id: companyId },
+                    status: InvoiceStatus.ACTIVE,
+                },
+                relations: ["company", "client", "items"],
+                order: { issuedAt: "DESC" }
+            }
+        );
+        if (!invoices || invoices.length === 0) {
+            throw new Error("No invoices found for this company");
+        };
+        return invoices;
+    };
+
+    async cancelInvoice(invoiceId: string) {
+        const invoice = await this.invoiceRepo.findOne({ where: { id: invoiceId } });
+        if (!invoice) throw new Error("Invoice not found");
+
+        invoice.status = InvoiceStatus.CANCELLED;
+        return await this.invoiceRepo.save(invoice);
     };
 
 };

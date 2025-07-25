@@ -1,6 +1,6 @@
 import { Invoice } from "../entities/Invoice";
 import { InvoiceType } from '../entities/Invoice';
-import InvoiceRepositoy from "../repositories/InvoiceRepositoy";
+import InvoiceRepository from "../repositories/InvoiceRepositoy";
 
 class InvoiceService {
 
@@ -26,19 +26,34 @@ class InvoiceService {
             }))
         };
 
-        const invoice = await InvoiceRepositoy.createInvoice(invoiceData);
+        const invoice = await InvoiceRepository.createInvoice(invoiceData);
         if (!invoice) throw new Error("Falha ao criar a nota fiscal");
         return invoice;
     };
 
     async consultationInvoice(invoiceId: string) {
-        const invoice = await InvoiceRepositoy.consultationInvoice(invoiceId);
+        const invoice = await InvoiceRepository.consultationInvoice(invoiceId);
         if (!invoice) throw new Error("Invoice not found");
         return invoice;
     };
 
-    async validationInvoice(invoiceId: string) {
+    async validationInvoice(code: string) {
+        const validate = await InvoiceRepository.validationInvoice(code);
+        return validate;
+    };
 
+    async cancelInvoice(invoiceId: string) {
+        const canceledInvoice = await InvoiceRepository.cancelInvoice(invoiceId);
+        if (!canceledInvoice) throw new Error("Invoice not found or already cancelled");
+        return canceledInvoice;
+    };
+
+    async listInvoices(companyId: string) {
+        const invoices = await InvoiceRepository.listInvoicesByCompany(companyId);
+        if (!invoices || invoices.length === 0) {
+            throw new Error("No invoices found for this company");
+        }
+        return invoices;
     };
 
 };

@@ -33,7 +33,7 @@ API backend desenvolvida em Node.js com suporte para emissão, validação e ger
 
 ```bash
 # Clone o repositório
-git clone https://github.com/seu-usuario/emitfiscal-api.git
+git clone https://github.com/Wellington-Silva/NFControl
 cd NFControl
 
 # Instale as dependências
@@ -54,9 +54,8 @@ npm run start:dev
 
 | Método | Rota                       | Descrição                     |
 | ------ | -------------------------- | ----------------------------- |
-| POST   | `/invoices/nfe`            | Emitir NF-e (produtos)        |
-| POST   | `/invoices/nfse`           | Emitir NFS-e (serviços)       |
-| GET    | `/invoices/:code`          | Obter detalhes da nota fiscal |
+| POST   | `/invoices/issue`          | Emitir NF-e NFS-e             |
+| GET    | `/invoices/:id  `          | Obter detalhes da nota fiscal |
 | GET    | `/invoices/validate/:code` | Validar código da nota fiscal |
 | DELETE | `/invoices/:id`            | Cancelar nota fiscal          |
 | GET    | `/invoices`                | Listar notas por filtros      |
