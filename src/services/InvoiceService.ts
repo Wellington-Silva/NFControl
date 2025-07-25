@@ -4,7 +4,7 @@ import InvoiceRepository from "../repositories/InvoiceRepositoy";
 
 class InvoiceService {
 
-    async issueInvoice(data: Invoice, companyId: string, clientId: string) {
+    async emissionInvoice(data: Invoice, companyId: string, clientId: string) {
         if (!data) {
             throw new Error("Dados da nota fiscal não foram fornecidos");
         }
@@ -48,7 +48,7 @@ class InvoiceService {
         return canceledInvoice;
     };
 
-    async listInvoices(companyId: string) {
+    async emissionHistory(companyId: string) {
         const invoices = await InvoiceRepository.listInvoicesByCompany(companyId);
         if (!invoices || invoices.length === 0) {
             throw new Error("No invoices found for this company");

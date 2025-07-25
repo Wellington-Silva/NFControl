@@ -3,7 +3,7 @@ import InvoiceService from "../services/InvoiceService";
 
 class InvoiceController {
 
-    async issue(req: Request, res: Response) {
+    async emission(req: Request, res: Response) {
         try {
             const { companyId, clientId } = req?.query;
             const data = req.body;
@@ -16,11 +16,11 @@ class InvoiceController {
                 return res.status(400).json({ error: "Company ID and Client ID must be strings" });
             };
 
-            const invoice = await InvoiceService.issueInvoice(data, companyId, clientId);
+            const invoice = await InvoiceService.emissionInvoice(data, companyId, clientId);
             res.status(201).json(invoice);
         } catch (error) {
             console.log(error);
-            res.status(400).json({ error: true, message: "Failed to issue invoice" });
+            res.status(400).json({ error: true, message: "Failed to emission invoice" });
         }
     };
 
@@ -41,13 +41,13 @@ class InvoiceController {
 
     };
 
-    async list(req: Request, res: Response) {
+    async history(req: Request, res: Response) {
         try {
             const { companyId } = req?.query;
             if (!companyId) {
                 return res.status(400).json({ error: "Company ID is required" });
             }
-            const invoices = await InvoiceService.listInvoices(companyId as string);
+            const invoices = await InvoiceService.emissionHistory(companyId as string);
             res.json(invoices);
         } catch (error) {
             res.status(500).json({ error: true, message: "Internal Server Error" });

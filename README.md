@@ -54,7 +54,7 @@ npm run start:dev
 
 | Método | Rota                       | Descrição                     |
 | ------ | -------------------------- | ----------------------------- |
-| POST   | `/invoices/issue`          | Emitir NF-e NFS-e             |
+| POST   | `/invoices/emission`       | Emitir NF-e NFS-e             |
 | GET    | `/invoices/:id  `          | Obter detalhes da nota fiscal |
 | GET    | `/invoices/validate/:code` | Validar código da nota fiscal |
 | DELETE | `/invoices/:id`            | Cancelar nota fiscal          |
