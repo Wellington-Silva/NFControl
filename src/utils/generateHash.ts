@@ -1,15 +1,7 @@
 import crypto from 'crypto';
 
-export const generateHash = async (): Promise<string> => {
-    return new Promise((resolve, reject) => {
-        const hash = crypto.createHash('sha256');
-        hash.update(Date.now().toString());
-        const generatedHash = hash.digest('hex');
-        
-        if (generatedHash) {
-            resolve(generatedHash);
-        } else {
-            reject(new Error('Failed to generate hash'));
-        }
-    });
+export const generateHash = (): string => {
+    const randomData = `${Date.now()}-${crypto.randomBytes(16).toString('hex')}`;
+    const hash = crypto.createHash('sha256').update(randomData).digest('hex');
+    return hash;
 };

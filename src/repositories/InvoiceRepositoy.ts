@@ -5,6 +5,7 @@ import { InvoiceType } from '../entities/Invoice';
 import { InvoiceStatus } from '../entities/Invoice';
 import { InvoiceItem } from "../entities/InvoiceItem";
 import { AppDataSource } from "../database/ormconfig";
+import { generateHash } from "../utils/generateHash";
 
 class InvoiceRepository {
 
@@ -24,13 +25,14 @@ class InvoiceRepository {
         }
 
         let invoice;
+        const hash = generateHash();
 
         if (invoiceData.type === InvoiceType.NFE) {
             invoice = this.invoiceRepo.create({
                 type: InvoiceType.NFE,
                 invoiceCode: invoiceData.invoiceCode,
                 total: invoiceData.total,
-                hash: invoiceData.hash,
+                hash: hash,
                 status: InvoiceStatus.ACTIVE,
                 cfop: invoiceData.cfop,
                 ncm: invoiceData.ncm,
@@ -46,7 +48,7 @@ class InvoiceRepository {
                 type: InvoiceType.NFSE,
                 invoiceCode: invoiceData.invoiceCode,
                 total: invoiceData.total,
-                hash: invoiceData.hash,
+                hash: hash,
                 status: InvoiceStatus.ACTIVE,
                 serviceCode: invoiceData.serviceCode,
                 municipalCode: invoiceData.municipalCode,
@@ -93,26 +95,28 @@ class InvoiceRepository {
 
     };
 
-    async calcTax(code: string) { //  Cálculo automático de impostos (ICMS e ISS)
+    async calcTax(code: string) {
         const invoice = await this.invoiceRepo.findOne({ where: { invoiceCode: code }, relations: ["items"] });
         if (!invoice) throw new Error("Invoice not found");
 
         let totalTax = 0;
         invoice.items.forEach(item => {
-            if (item.taxType === 'ICMS') {
-                totalTax += item.total * (item.taxRate / 100);
-            } else if (item.taxType === 'ISS') {
+            if (item.taxType === 'ICMS' || item.taxType === 'ISS') {
                 totalTax += item.total * (item.taxRate / 100);
             }
         });
 
-        return totalTax;
+        // adiciona totalTax dinamicamente
+        return {
+            ...invoice,
+            totalTax
+        };
     };
 
     async listInvoicesByCompany(companyId: string) {
         const invoices = await this.invoiceRepo.find(
             {
-                where: { 
+                where: {
                     company: { id: companyId },
                     status: InvoiceStatus.ACTIVE,
                 },

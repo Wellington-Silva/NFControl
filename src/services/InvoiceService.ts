@@ -28,7 +28,11 @@ class InvoiceService {
 
         const invoice = await InvoiceRepository.createInvoice(invoiceData);
         if (!invoice) throw new Error("Falha ao criar a nota fiscal");
-        return invoice;
+
+        // Calcular os impostos
+        const invoiceWithTax = await InvoiceRepository.calcTax(invoice.invoiceCode);
+
+        return invoiceWithTax;
     };
 
     async consultationInvoice(invoiceId: string) {
