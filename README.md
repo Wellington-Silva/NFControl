@@ -6,7 +6,7 @@ API backend desenvolvida em Node.js com suporte para emissão, validação e ger
 
 ## 🚀 Funcionalidades
 
-- 📦 Emissão de NF-e para produtos (modelo 55)
+- 📦 Emissão de NF-e para produtos
 - 🧾 Emissão de NFS-e para serviços
 - 🔍 Validação de notas fiscais via código único
 - 📊 Cálculo automático de impostos (ICMS e ISS)
