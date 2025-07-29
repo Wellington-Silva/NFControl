@@ -67,6 +67,8 @@ npm run dev
 ```bash
 src/
 ├── controllers/
+|   ├── ClientController.ts
+|   ├── CompanyController.ts
 │   ├── InvoiceController.ts
 ├── routes/
 │   ├── InvoiceRouter.ts
@@ -74,17 +76,23 @@ src/
 |   ├──  ClientRouter.ts
 ├── services/
 |   ├── AuthService.ts
+|   ├── ClientService.ts
+|   ├── CompanyService.ts
 │   ├── InvoiceService.ts
 ├── entities/
 │   ├── Company.ts
 │   ├── Client.ts
 │   ├── Invoice.ts
 │   ├── InvoiceItem.ts
+├── Repositories
+|   ├── AuthRepository.ts
+|   ├── ClientRepository.ts
+|   ├── CompanyRepository.ts
+|   ├── InvoiceRepository.ts
 ├── database/
 │   ├── ormconfig.ts
 ├── middlewares/
 │   ├── authMiddleware.ts
-|   ├── asyncHandler.ts
 ├── utils/
 │   ├── generateHash.ts
 ├── server.ts
