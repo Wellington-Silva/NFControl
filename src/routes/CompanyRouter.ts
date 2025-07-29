@@ -4,7 +4,7 @@ import authMiddleware from '../middlewares/jwt';
 
 const router = Router();
 
-router.post('/sign', CompanyController.login);
+router.post('/signIn', CompanyController.login);
 router.get('/', authMiddleware, CompanyController.list);
 router.post('/:id', authMiddleware, CompanyController.show);
 router.post('/', CompanyController.register);

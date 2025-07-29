@@ -42,8 +42,11 @@ class InvoiceService {
     };
 
     async validationInvoice(code: string) {
-        const validate = await InvoiceRepository.validationInvoice(code);
-        return validate;
+        const result = await InvoiceRepository.validationInvoice(code);
+        if (!result.valid)
+            return result;
+        
+        return result;
     };
 
     async cancelInvoice(invoiceId: string) {

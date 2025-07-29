@@ -92,7 +92,54 @@ class InvoiceRepository {
     };
 
     async validationInvoice(code: string) {
+        if (!code) throw new Error("Invoice code is required");
 
+        const invoice = await this.invoiceRepo.findOne({
+            where: { invoiceCode: code },
+            relations: ["company", "client", "items"],
+        });
+
+        if (!invoice) throw new Error("Nota fiscal não encontrada.");
+
+        const errors: string[] = [];
+
+        // Tipo da nota
+        if (![InvoiceType.NFE, InvoiceType.NFSE].includes(invoice.type)) {
+            errors.push("Tipo de nota fiscal inválido.");
+        }
+
+        // Campos obrigatórios por tipo
+        if (invoice.type === InvoiceType.NFE) {
+            if (!invoice.cfop) errors.push("CFOP é obrigatório para NF-e.");
+            if (!invoice.ncm) errors.push("NCM é obrigatório para NF-e.");
+            if (!invoice.cst) errors.push("CST é obrigatório para NF-e.");
+        }
+
+        if (invoice.type === InvoiceType.NFSE) {
+            if (!invoice.serviceCode) errors.push("Código de serviço é obrigatório para NFS-e.");
+            if (!invoice.municipalCode) errors.push("Código municipal é obrigatório para NFS-e.");
+        }
+
+        // Itens obrigatórios
+        if (!invoice.items || invoice.items.length === 0) {
+            errors.push("A nota fiscal deve conter pelo menos um item.");
+        } else {
+            invoice.items.forEach((item, index) => {
+                if (!item.name) errors.push(`Item ${index + 1}: nome ausente.`);
+                if (!item.description) errors.push(`Item ${index + 1}: descrição ausente.`);
+                if (!item.quantity || item.quantity <= 0) errors.push(`Item ${index + 1}: quantidade inválida.`);
+                if (!item.unitPrice || item.unitPrice <= 0) errors.push(`Item ${index + 1}: preço unitário inválido.`);
+                if (item.taxRate == null || item.taxRate < 0) errors.push(`Item ${index + 1}: alíquota de imposto inválida.`);
+                if (!item.taxType || !['ICMS', 'ISS'].includes(item.taxType)) {
+                    errors.push(`Item ${index + 1}: tipo de imposto inválido (esperado ICMS ou ISS).`);
+                }
+            });
+        };
+
+        return {
+            valid: errors.length === 0,
+            errors
+        };
     };
 
     async calcTax(code: string) {
@@ -106,7 +153,6 @@ class InvoiceRepository {
             }
         });
 
-        // adiciona totalTax dinamicamente
         return {
             ...invoice,
             totalTax

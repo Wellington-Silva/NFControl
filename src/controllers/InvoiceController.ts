@@ -38,14 +38,21 @@ class InvoiceController {
     };
 
     async validation(req: Request, res: Response) {
-
+        try {
+            const { code } = req?.query;
+            const validation = await InvoiceService.validationInvoice(code as string);
+            res.json(validation);
+        } catch (error) {
+            res.status(500).json({ error: true, message: "Internal Server Error" });
+            
+        }
     };
 
     async history(req: Request, res: Response) {
         try {
-            const { companyId } = req?.query;
+            const companyId = (req as any).companyId; 
             if (!companyId) {
-                return res.status(400).json({ error: "Company ID is required" });
+                return res.status(400).json({ error: "Você não está autenticado. Faça login e tente novamente" });
             }
             const invoices = await InvoiceService.emissionHistory(companyId as string);
             res.json(invoices);
