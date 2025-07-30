@@ -3,9 +3,10 @@ import { Company } from "../entities/Company";
 import { Invoice } from "../entities/Invoice";
 import { InvoiceType } from '../entities/Invoice';
 import { InvoiceStatus } from '../entities/Invoice';
+import { generateHash } from "../utils/generateHash";
 import { InvoiceItem } from "../entities/InvoiceItem";
 import { AppDataSource } from "../database/ormconfig";
-import { generateHash } from "../utils/generateHash";
+import { formatInvoice } from "../utils/invoiceFormatter";
 
 class InvoiceRepository {
 
@@ -17,8 +18,8 @@ class InvoiceRepository {
     ) { };
 
     async createInvoice(invoiceData: any) {
-        const company = await this.companyRepo.findOne({ where: { id: invoiceData.companyId } });
-        const client = await this.clientRepo.findOne({ where: { id: invoiceData.clientId } });
+        const company = await this.companyRepo.findOne({ where: { id: invoiceData.companyId }, relations: ["id", "name", "cnpj", "email", "phone", "cep"] });
+        const client = await this.clientRepo.findOne({ where: { id: invoiceData.clientId }, relations: ["id", "name", "cpfOrCnpj", "email", "phone", "cep"] });
 
         if (!company || !client) {
             throw new Error("Empresa ou cliente não encontrados.");
@@ -88,7 +89,15 @@ class InvoiceRepository {
 
     async consultationInvoice(code: string) {
         if (!code) throw new Error("Invoice Code is required");
-        return await this.invoiceRepo.findOne({ where: { invoiceCode: code } });
+
+        const invoice = await this.invoiceRepo.findOne({
+            where: { invoiceCode: code },
+            relations: ["company", "client", "items"]
+        });
+
+        if (!invoice) throw new Error("Invoice not found");
+
+        return formatInvoice(invoice);
     };
 
     async validationInvoice(code: string) {
@@ -160,20 +169,20 @@ class InvoiceRepository {
     };
 
     async listInvoicesByCompany(companyId: string) {
-        const invoices = await this.invoiceRepo.find(
-            {
-                where: {
-                    company: { id: companyId },
-                    status: InvoiceStatus.ACTIVE,
-                },
-                relations: ["company", "client", "items"],
-                order: { issuedAt: "DESC" }
-            }
-        );
+        const invoices = await this.invoiceRepo.find({
+            where: {
+                company: { id: companyId },
+                status: InvoiceStatus.ACTIVE,
+            },
+            relations: ["company", "client", "items"],
+            order: { issuedAt: "DESC" }
+        });
+
         if (!invoices || invoices.length === 0) {
             throw new Error("No invoices found for this company");
-        };
-        return invoices;
+        }
+
+        return invoices.map(formatInvoice);
     };
 
     async cancelInvoice(invoiceId: string) {

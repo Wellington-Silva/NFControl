@@ -35,8 +35,8 @@ class InvoiceService {
         return invoiceWithTax;
     };
 
-    async consultationInvoice(invoiceId: string) {
-        const invoice = await InvoiceRepository.consultationInvoice(invoiceId);
+    async consultationInvoice(code: string) {
+        const invoice = await InvoiceRepository.consultationInvoice(code);
         if (!invoice) throw new Error("Invoice not found");
         return invoice;
     };

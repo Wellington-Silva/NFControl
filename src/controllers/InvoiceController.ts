@@ -26,13 +26,14 @@ class InvoiceController {
 
     async consultation(req: Request, res: Response) {
         try {
-            const { invoiceId } = req?.query;
-            if (!invoiceId) {
+            const { code } = req?.query;
+            if (!code) {
                 return res.status(400).json({ error: "Invoice ID is required" });
             }
-            const invoice = await InvoiceService.consultationInvoice(invoiceId as string);
+            const invoice = await InvoiceService.consultationInvoice(code as string);
             res.json(invoice);
         } catch (error) {
+            console.log(error)
             res.status(500).json({ error: true, message: "Internal Server Error" });
         }
     };
